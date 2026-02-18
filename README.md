@@ -21,30 +21,8 @@ This is a long-term project to collect and clean crime data (primarily FBI crime
 
 ## Example: Aggravated Assault by Victim Race Over Time
 
-See **`R/aggravated_assault_by_race.R`** for a worked example of this analysis.
+See **`R/aggravated_assault_by_race.R`** for a worked example of this analysis using the NIBRS Victim Segment.
 
-Two approaches are demonstrated:
-
-### Approach 1 – Arrest Data (ASR, 1974–present)
-Reflects the **race of the person arrested**, not the victim.
-
-```r
-# After running arrests.R to produce the cleaned yearly arrests file:
-arrests <- readRDS("...arrest_yearly_1974_2024.rds")
-
-agg_assault_by_race <-
-  arrests[arrests$offense_code %in% "aggravated assault", ] %>%
-  dplyr::group_by(year) %>%
-  dplyr::summarize(
-    dplyr::across(
-      c(total_white, total_black, total_asian,
-        total_american_indian, total_hispanic, total_non_hispanic),
-      sum, na.rm = TRUE
-    )
-  )
-```
-
-### Approach 2 – NIBRS Victim Segment (1991–present) ✓ Recommended for victim demographics
 Each row in the NIBRS victim segment is one victim. The `race_of_victim` field
 records the victim's race; `ucr_offense_code_1` through `ucr_offense_code_10`
 record the associated offenses (value `"assault offenses - aggravated assault"`
